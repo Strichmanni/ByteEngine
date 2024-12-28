@@ -1,1 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ByteEngine 0.1</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #fff;
+            overflow-x: hidden;
+        }
 
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: #111;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid #333;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        .burger {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            animation: slideIn 1s ease-in-out;
+        }
+
+        .burger div {
+            width: 25px;
+            height: 3px;
+            background-color: #fff;
+            margin: 4px 0;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 75%;
+            height: 100%;
+            background: #222;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        nav.active {
+            right: 0;
+            animation: slideInFromRight 0.5s ease-out;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 1.5rem;
+            margin: 1rem 0;
+            transition: 0.3s;
+        }
+
+        nav a:hover {
+            color: #aaa;
+            transform: scale(1.1);
+        }
+
+        .popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .popup-content {
+            background: #222;
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .popup-content button {
+            padding: 0.5rem 1rem;
+            margin-top: 1rem;
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .popup-content button:hover {
+            background: #aaa;
+            color: #000;
+        }
+
+        .main-content {
+            padding: 6rem 2rem 2rem 2rem;
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        section {
+            padding: 4rem 2rem;
+            border-bottom: 1px solid #333;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            margin-top: 2rem;
+            color: #000;
+            background: #fff;
+            border-radius: 50px;
+            text-transform: uppercase;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: #aaa;
+            color: #000;
+            transform: translateY(-5px);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInFromRight {
+            from {
+                right: -100%;
+            }
+            to {
+                right: 0;
+            }
+        }
+
+        @media (min-width: 768px) {
+            nav {
+                width: 50%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">ByteEngine 0.1</div>
+        <div class="burger" id="burger">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </header>
+
+    <nav id="nav">
+        <a href="#home" id="nav-home">Home</a>
+        <a href="#features" id="nav-features">Features</a>
+        <a href="#demo" id="nav-demo">Demo</a>
+        <a href="#release" id="nav-release">Release</a>
+        <a href="#contact" id="nav-contact">Contact</a>
+    </nav>
+
+    <div class="popup" id="popup">
+        <div class="popup-content">
+            <p id="popup-title">Select Language</p>
+            <button data-lang="en">English</button>
+            <button data-lang="de">Deutsch</button>
+            <button data-lang="it">Italiano</button>
+            <button data-lang="fr">Français</button>
+        </div>
+    </div>
+
+    <main class="main-content">
+        <section id="home">
+            <h1 id="headline">Welcome to ByteEngine 0.1</h1>
+            <p id="description">Experience the new 2D gaming engine, launching on March 15, 2025.</p>
+            <a href="#demo" class="btn" id="learn-more">Learn More</a>
+        </section>
+
+        <section id="features">
+            <h2 id="features-title">Features</h2>
+            <ul id="features-list">
+                <li>High-performance 2D rendering</li>
+                <li>Customizable game mechanics</li>
+                <li>Cross-platform support</li>
+                <li>Simple API for developers</li>
+            </ul>
+        </section>
+
+        <section id="demo">
+            <h2 id="demo-title">Interactive Demo</h2>
+            <p id="demo-description">Try out ByteEngine 0.1 in real-time. Build and play simple 2D games directly in your browser!</p>
+            <a href="#" class="btn" id="demo-button">Try the Demo</a>
+        </section>
+
+        <section id="release">
+            <h2 id="release-title">Release Information</h2>
+            <p id="release-description">ByteEngine 0.1 will be released on March 15, 2025. Sign up for updates and exclusive previews.</p>
+            <a href="#" class="btn" id="release-button">Sign Up</a>
+        </section>
+
+        <section id="contact">
+            <h2 id="contact-title">Contact Us</h2>
+            <p id="contact-description">Have questions or need support? Reach out to our team for more information.</p>
+            <a href="#" class="btn" id="contact-button">Contact Support</a>
+        </section>
+    </main>
+
+    <script>
+        const burger = document.getElementById('burger');
+        const nav = document.getElementById('nav');
+        const popup = document.getElementById('popup');
+        
+        const translations = {
+            en: {
+                "headline": "Welcome to ByteEngine 0.1",
+                "description": "Experience the new 2D gaming engine, launching on March 15, 2025.",
+                "learnMore": "Learn More",
+                "featuresTitle": "Features",
+                "featuresList": ["High-performance 2D rendering", "Customizable game mechanics", "Cross-platform support", "Simple API for developers"],
+                "demoTitle": "Interactive Demo",
+                "demoDescription": "Try out ByteEngine 0.1 in real-time. Build and play simple 2D games directly in your browser!",
+                "demoButton": "Try the Demo",
+                "releaseTitle": "Release Information",
+                "releaseDescription": "ByteEngine 0.1 will be released on March 15, 2025. Sign up for updates and exclusive previews.",
+                "releaseButton": "Sign Up",
+                "contactTitle": "Contact Us",
+                "contactDescription": "Have questions or need support? Reach out to our team for more information.",
+                "contactButton": "Contact Support",
+                "popupTitle": "Select Language"
+            },
+            de: {
+                "headline": "Willkommen bei ByteEngine 0.1",
+                "description": "Erleben Sie die neue 2D-Spielengine, die am 15. März 2025 erscheint.",
+                "learnMore": "Erfahren Sie mehr",
+                "featuresTitle": "Funktionen",
+                "featuresList": ["Hochleistungsfähiges 2D-Rendering", "Anpassbare Spielmechaniken", "Plattformübergreifende Unterstützung", "Einfache API für Entwickler"],
+                "demoTitle": "Interaktive Demo",
+                "demoDescription": "Probieren Sie ByteEngine 0.1 in Echtzeit aus. Erstellen und spielen Sie einfache 2D-Spiele direkt in Ihrem Browser!",
+                "demoButton": "Demo ausprobieren",
+                "releaseTitle": "Veröffentlichungsinformationen",
+                "releaseDescription": "ByteEngine 0.1 wird am 15. März 2025 veröffentlicht. Melden Sie sich für Updates und exklusive Vorschauen an.",
+                "releaseButton": "Anmelden",
+                "contactTitle": "Kontaktieren Sie uns",
+                "contactDescription": "Haben Sie Fragen oder benötigen Sie Unterstützung? Kontaktieren Sie unser Team für weitere Informationen.",
+                "contactButton": "Support kontaktieren",
+                "popupTitle": "Sprache auswählen"
+            },
+            it: {
+                "headline": "Benvenuto su ByteEngine 0.1",
+                "description": "Scopri il nuovo motore di gioco 2D, in uscita il 15 marzo 2025.",
+                "learnMore": "Scopri di più",
+                "featuresTitle": "Caratteristiche",
+                "featuresList": ["Rendering 2D ad alte prestazioni", "Meccaniche di gioco personalizzabili", "Supporto multipiattaforma", "API semplice per gli sviluppatori"],
+                "demoTitle": "Demo Interattiva",
+                "demoDescription": "Prova ByteEngine 0.1 in tempo reale. Crea e gioca a semplici giochi 2D direttamente nel tuo browser!",
+                "demoButton": "Prova la Demo",
+                "releaseTitle": "Informazioni sul Rilascio",
+                "releaseDescription": "ByteEngine 0.1 sarà rilasciato il 15 marzo 2025. Iscriviti per aggiornamenti e anteprime esclusive.",
+                "releaseButton": "Iscriviti",
+                "contactTitle": "Contattaci",
+                "contactDescription": "Hai domande o hai bisogno di supporto? Contatta il nostro team per ulteriori informazioni.",
+                "contactButton": "Contatta il Supporto",
+                "popupTitle": "Seleziona Lingua"
+            },
+            fr: {
+                "headline": "Bienvenue sur ByteEngine 0.1",
+                "description": "Découvrez le nouveau moteur de jeu 2D, lancement le 15 mars 2025.",
+                "learnMore": "En savoir plus",
+                "featuresTitle": "Caractéristiques",
+                "featuresList": ["Rendu 2D haute performance", "Mécaniques de jeu personnalisables", "Support multiplateforme", "API simple pour les développeurs"],
+                "demoTitle": "Démo Interactive",
+                "demoDescription": "Essayez ByteEngine 0.1 en temps réel. Créez et jouez à des jeux 2D simples directement dans votre navigateur!",
+                "demoButton": "Essayer la Démo",
+                "releaseTitle": "Informations sur la Sortie",
+                "releaseDescription": "ByteEngine 0.1 sera lancé le 15 mars 2025. Inscrivez-vous pour des mises à jour et des aperçus exclusifs.",
+                "releaseButton": "S'inscrire",
+                "contactTitle": "Nous Contacter",
+                "contactDescription": "Vous avez des questions ou besoin d'assistance? Contactez notre équipe pour plus d'informations.",
+                "contactButton": "Contacter le Support",
+                "popupTitle": "Choisir une Langue"
+            }
+        };
+
+        const updateContent = (lang) => {
+            const text = translations[lang];
+
+            document.getElementById("headline").textContent = text.headline;
+            document.getElementById("description").textContent = text.description;
+            document.getElementById("learn-more").textContent = text.learnMore;
+
+            document.getElementById("features-title").textContent = text.featuresTitle;
+            const featuresList = document.getElementById("features-list");
+            featuresList.innerHTML = text.featuresList.map(item => `<li>${item}</li>`).join('');
+
+            document.getElementById("demo-title").textContent = text.demoTitle;
+            document.getElementById("demo-description").textContent = text.demoDescription;
+            document.getElementById("demo-button").textContent = text.demoButton;
+
+            document.getElementById("release-title").textContent = text.releaseTitle;
+            document.getElementById("release-description").textContent = text.releaseDescription;
+            document.getElementById("release-button").textContent = text.releaseButton;
+
+            document.getElementById("contact-title").textContent = text.contactTitle;
+            document.getElementById("contact-description").textContent = text.contactDescription;
+            document.getElementById("contact-button").textContent = text.contactButton;
+
+            document.getElementById("popup-title").textContent = text.popupTitle;
+        };
+
+        document.querySelectorAll(".popup button").forEach(button => {
+            button.addEventListener("click", () => {
+                updateContent(button.dataset.lang);
+                popup.style.display = 'none';  // Close the popup
+            });
+        });
+
+        burger.addEventListener("click", () => {
+            nav.classList.toggle("active");
+        });
+
+        const detectLanguage = () => {
+            const lang = navigator.language.slice(0, 2);
+            updateContent(translations[lang] ? lang : "en");
+        };
+
+        detectLanguage();
+    </script>
+</body>
+</html>
