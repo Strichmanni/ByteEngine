@@ -1,4 +1,4 @@
-# ByteEngine 1.0
+# ByteEngine 0.1
 
 **ByteEngine** ist eine minimalistische 2D-Spiele-Engine, die mit den eigens entwickelten Skriptsprachen **ShadowCode** und **ShadowScript** arbeitet. Diese Engine bietet Entwicklern eine intuitive Möglichkeit, Spiele mit einer einfachen Syntax und umfangreicher Steuerung zu erstellen.
 
