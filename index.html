@@ -383,7 +383,7 @@
             const text = await response.text();
 
             // Beispiel: Fortschritt aus dem Markdown extrahieren
-            const progressPercentage = 0;
+            const progressPercentage = progress-description;
 
             // Update die Fortschrittsanzeige
             document.getElementById('progress-description').textContent = `${progressPercentage}%`;
