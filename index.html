@@ -101,9 +101,14 @@
             padding: 2rem;
             border-radius: 20px;
             text-align: center;
-            width: 80%;
-            max-width: 600px;
-            overflow-y: auto;
+            max-width: 90%;
+            overflow: auto;
+        }
+
+        .popup-content pre {
+            color: #fff;
+            white-space: pre-wrap;
+            word-wrap: break-word;
         }
 
         .popup-content button {
@@ -189,17 +194,6 @@
                 width: 50%;
             }
         }
-
-        /* Markdown CSS styles for popup */
-        .markdown {
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            font-family: 'Courier New', Courier, monospace;
-            color: #ccc;
-            background-color: #333;
-            padding: 1rem;
-            border-radius: 10px;
-        }
     </style>
 </head>
 <body>
@@ -276,9 +270,9 @@
         const burger = document.getElementById('burger');
         const nav = document.getElementById('nav');
         const popup = document.getElementById('popup');
+        const progressTitle = document.getElementById('progress-title');
         const progressDescription = document.getElementById('progress-description');
-        const progressButton = document.getElementById('progress-button');
-
+        
         const translations = {
             en: {
                 "headline": "Welcome to ByteEngine 0.1",
@@ -299,54 +293,107 @@
                 "contactDescription": "Have questions or need support? Reach out to our team for more information.",
                 "contactButton": "Contact Support",
                 "popupTitle": "Select Language"
+            },
+            de: {
+                "headline": "Willkommen bei ByteEngine 0.1",
+                "description": "Erleben Sie die neue 2D-Spielengine, die am 15. März 2025 erscheint.",
+                "learnMore": "Erfahren Sie mehr",
+                "featuresTitle": "Funktionen",
+                "featuresList": ["Hochleistungsfähiges 2D-Rendering", "Anpassbare Spielmechaniken", "Plattformübergreifende Unterstützung", "Einfache API für Entwickler"],
+                "demoTitle": "Interaktive Demo",
+                "demoDescription": "Probieren Sie ByteEngine 0.1 in Echtzeit aus. Erstellen und spielen Sie einfache 2D-Spiele direkt in Ihrem Browser!",
+                "demoButton": "Demo ausprobieren",
+                "releaseTitle": "Veröffentlichungsinformationen",
+                "releaseDescription": "ByteEngine 0.1 wird am 15. März 2025 veröffentlicht. Melden Sie sich für Updates und exklusive Vorschauen an.",
+                "releaseButton": "Anmelden",
+                "contactTitle": "Kontaktieren Sie uns",
+                "contactDescription": "Haben Sie Fragen oder benötigen Sie Unterstützung? Kontaktieren Sie unser Team für weitere Informationen.",
+                "contactButton": "Support kontaktieren",
+                "popupTitle": "Sprache auswählen"
+            },
+            it: {
+                "headline": "Benvenuto su ByteEngine 0.1",
+                "description": "Scopri il nuovo motore di gioco 2D, in uscita il 15 marzo 2025.",
+                "learnMore": "Scopri di più",
+                "featuresTitle": "Caratteristiche",
+                "featuresList": ["Rendering 2D ad alte prestazioni", "Meccaniche di gioco personalizzabili", "Supporto multipiattaforma", "API semplice per gli sviluppatori"],
+                "demoTitle": "Demo Interattiva",
+                "demoDescription": "Prova ByteEngine 0.1 in tempo reale. Crea e gioca a semplici giochi 2D direttamente nel tuo browser!",
+                "demoButton": "Prova la Demo",
+                "releaseTitle": "Informazioni sul Rilascio",
+                "releaseDescription": "ByteEngine 0.1 sarà rilasciato il 15 marzo 2025. Iscriviti per aggiornamenti e anteprime esclusive.",
+                "releaseButton": "Iscriviti",
+                "contactTitle": "Contattaci",
+                "contactDescription": "Hai domande o hai bisogno di supporto? Contatta il nostro team per ulteriori informazioni.",
+                "contactButton": "Contatta il Supporto",
+                "popupTitle": "Seleziona Lingua"
+            },
+            fr: {
+                "headline": "Bienvenue sur ByteEngine 0.1",
+                "description": "Découvrez le nouveau moteur de jeu 2D, lancement le 15 mars 2025.",
+                "learnMore": "En savoir plus",
+                "featuresTitle": "Caractéristiques",
+                "featuresList": ["Rendu 2D haute performance", "Mécaniques de jeu personnalisables", "Support multiplateforme", "API simple pour les développeurs"],
+                "demoTitle": "Démo Interactive",
+                "demoDescription": "Essayez ByteEngine 0.1 en temps réel. Créez et jouez à des jeux 2D simples directement dans votre navigateur!",
+                "demoButton": "Essayer la Démo",
+                "releaseTitle": "Informations sur la Sortie",
+                "releaseDescription": "ByteEngine 0.1 sera lancé le 15 mars 2025. Inscrivez-vous pour des mises à jour et des aperçus exclusifs.",
+                "releaseButton": "S'inscrire",
+                "contactTitle": "Nous Contacter",
+                "contactDescription": "Vous avez des questions ou besoin d'assistance? Contactez notre équipe pour plus d'informations.",
+                "contactButton": "Contacter le Support",
+                "popupTitle": "Choisir une Langue"
             }
         };
 
-        // Function to fetch and update progress information
-        const fetchStatus = async () => {
+        // Dynamically load status from GitHub markdown
+        const loadStatus = async () => {
             try {
                 const response = await fetch('https://raw.githubusercontent.com/Strichmanni/ByteEngine/refs/heads/main/Status.md');
-                const markdownText = await response.text();
-                const progressMatch = markdownText.match(/Progress:\s*(\d+[\.,]?\d*)%/);
+                const markdown = await response.text();
+                
+                // Extract progress and status
+                const progressMatch = markdown.match(/Progress:\s*([\d.]+%)/);
+                const progress = progressMatch ? progressMatch[1] : "Not Available";
 
-                if (progressMatch) {
-                    progressDescription.textContent = `${progressMatch[1]}%`;
-                }
+                const statusMatch = markdown.match(/Current:\s*(.*)/);
+                const status = statusMatch ? statusMatch[1] : "Not Available";
 
-                progressButton.addEventListener('click', () => {
-                    showMarkdownPopup(markdownText);
+                // Update progress and status text
+                progressDescription.textContent = progress;
+                progressTitle.textContent = `Status: ${status}`;
+
+                document.getElementById('progress-button').addEventListener("click", () => {
+                    // Show the markdown content in the popup
+                    document.getElementById("popup-title").textContent = "Progress Information";
+                    document.querySelector(".popup-content pre").textContent = markdown;
+                    popup.style.display = "flex";
                 });
+
             } catch (error) {
-                console.error('Error fetching status:', error);
+                console.error('Failed to load status:', error);
             }
         };
 
-        const showMarkdownPopup = (markdownText) => {
-            const popupContent = document.createElement('div');
-            popupContent.classList.add('popup-content');
-            const markdownContainer = document.createElement('div');
-            markdownContainer.classList.add('markdown');
-            markdownContainer.textContent = markdownText;
-            popupContent.appendChild(markdownContainer);
-            const closeButton = document.createElement('button');
-            closeButton.textContent = 'Close';
-            closeButton.addEventListener('click', () => popup.style.display = 'none');
-            popupContent.appendChild(closeButton);
-            popup.innerHTML = '';
-            popup.appendChild(popupContent);
-            popup.style.display = 'flex';
-        };
+        // Call the load status function on page load
+        loadStatus();
 
+        // Handle language switching
         const updateContent = (lang) => {
             const text = translations[lang];
-
             document.getElementById("headline").textContent = text.headline;
             document.getElementById("description").textContent = text.description;
             document.getElementById("learn-more").textContent = text.learnMore;
-
             document.getElementById("features-title").textContent = text.featuresTitle;
+
             const featuresList = document.getElementById("features-list");
-            featuresList.innerHTML = text.featuresList.map(item => `<li>${item}</li>`).join('');
+            featuresList.innerHTML = '';
+            text.featuresList.forEach(feature => {
+                const listItem = document.createElement('li');
+                listItem.textContent = feature;
+                featuresList.appendChild(listItem);
+            });
 
             document.getElementById("demo-title").textContent = text.demoTitle;
             document.getElementById("demo-description").textContent = text.demoDescription;
@@ -359,28 +406,26 @@
             document.getElementById("contact-title").textContent = text.contactTitle;
             document.getElementById("contact-description").textContent = text.contactDescription;
             document.getElementById("contact-button").textContent = text.contactButton;
-
-            document.getElementById("popup-title").textContent = text.popupTitle;
         };
 
-        document.querySelectorAll(".popup button").forEach(button => {
-            button.addEventListener("click", () => {
-                updateContent(button.dataset.lang);
-                popup.style.display = 'none';  // Close the popup
-            });
-        });
-
+        // Burger menu toggle
         burger.addEventListener("click", () => {
             nav.classList.toggle("active");
         });
 
-        const detectLanguage = () => {
-            const lang = navigator.language.slice(0, 2);
-            updateContent(translations[lang] ? lang : "en");
-        };
+        // Popup close handler
+        document.querySelector(".popup-content button").addEventListener("click", () => {
+            popup.style.display = "none";
+        });
 
-        detectLanguage();
-        fetchStatus();  // Fetch and update the status
+        // Language button click handler
+        document.querySelectorAll(".popup-content button").forEach(button => {
+            button.addEventListener("click", (e) => {
+                const lang = e.target.dataset.lang;
+                updateContent(lang);
+                popup.style.display = "none";
+            });
+        });
     </script>
 </body>
 </html>
