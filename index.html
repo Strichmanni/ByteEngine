@@ -101,6 +101,9 @@
             padding: 2rem;
             border-radius: 20px;
             text-align: center;
+            width: 80%;
+            max-width: 600px;
+            overflow-y: auto;
         }
 
         .popup-content button {
@@ -186,6 +189,17 @@
                 width: 50%;
             }
         }
+
+        /* Markdown CSS styles for popup */
+        .markdown {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Courier New', Courier, monospace;
+            color: #ccc;
+            background-color: #333;
+            padding: 1rem;
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
@@ -262,7 +276,9 @@
         const burger = document.getElementById('burger');
         const nav = document.getElementById('nav');
         const popup = document.getElementById('popup');
-        
+        const progressDescription = document.getElementById('progress-description');
+        const progressButton = document.getElementById('progress-button');
+
         const translations = {
             en: {
                 "headline": "Welcome to ByteEngine 0.1",
@@ -283,58 +299,42 @@
                 "contactDescription": "Have questions or need support? Reach out to our team for more information.",
                 "contactButton": "Contact Support",
                 "popupTitle": "Select Language"
-            },
-            de: {
-                "headline": "Willkommen bei ByteEngine 0.1",
-                "description": "Erleben Sie die neue 2D-Spielengine, die am 15. März 2025 erscheint.",
-                "learnMore": "Erfahren Sie mehr",
-                "featuresTitle": "Funktionen",
-                "featuresList": ["Hochleistungsfähiges 2D-Rendering", "Anpassbare Spielmechaniken", "Plattformübergreifende Unterstützung", "Einfache API für Entwickler"],
-                "demoTitle": "Interaktive Demo",
-                "demoDescription": "Probieren Sie ByteEngine 0.1 in Echtzeit aus. Erstellen und spielen Sie einfache 2D-Spiele direkt in Ihrem Browser!",
-                "demoButton": "Demo ausprobieren",
-                "releaseTitle": "Veröffentlichungsinformationen",
-                "releaseDescription": "ByteEngine 0.1 wird am 15. März 2025 veröffentlicht. Melden Sie sich für Updates und exklusive Vorschauen an.",
-                "releaseButton": "Anmelden",
-                "contactTitle": "Kontaktieren Sie uns",
-                "contactDescription": "Haben Sie Fragen oder benötigen Sie Unterstützung? Kontaktieren Sie unser Team für weitere Informationen.",
-                "contactButton": "Support kontaktieren",
-                "popupTitle": "Sprache auswählen"
-            },
-            it: {
-                "headline": "Benvenuto su ByteEngine 0.1",
-                "description": "Scopri il nuovo motore di gioco 2D, in uscita il 15 marzo 2025.",
-                "learnMore": "Scopri di più",
-                "featuresTitle": "Caratteristiche",
-                "featuresList": ["Rendering 2D ad alte prestazioni", "Meccaniche di gioco personalizzabili", "Supporto multipiattaforma", "API semplice per gli sviluppatori"],
-                "demoTitle": "Demo Interattiva",
-                "demoDescription": "Prova ByteEngine 0.1 in tempo reale. Crea e gioca a semplici giochi 2D direttamente nel tuo browser!",
-                "demoButton": "Prova la Demo",
-                "releaseTitle": "Informazioni sul Rilascio",
-                "releaseDescription": "ByteEngine 0.1 sarà rilasciato il 15 marzo 2025. Iscriviti per aggiornamenti e anteprime esclusive.",
-                "releaseButton": "Iscriviti",
-                "contactTitle": "Contattaci",
-                "contactDescription": "Hai domande o hai bisogno di supporto? Contatta il nostro team per ulteriori informazioni.",
-                "contactButton": "Contatta il Supporto",
-                "popupTitle": "Seleziona Lingua"
-            },
-            fr: {
-                "headline": "Bienvenue sur ByteEngine 0.1",
-                "description": "Découvrez le nouveau moteur de jeu 2D, lancement le 15 mars 2025.",
-                "learnMore": "En savoir plus",
-                "featuresTitle": "Caractéristiques",
-                "featuresList": ["Rendu 2D haute performance", "Mécaniques de jeu personnalisables", "Support multiplateforme", "API simple pour les développeurs"],
-                "demoTitle": "Démo Interactive",
-                "demoDescription": "Essayez ByteEngine 0.1 en temps réel. Créez et jouez à des jeux 2D simples directement dans votre navigateur!",
-                "demoButton": "Essayer la Démo",
-                "releaseTitle": "Informations sur la Sortie",
-                "releaseDescription": "ByteEngine 0.1 sera lancé le 15 mars 2025. Inscrivez-vous pour des mises à jour et des aperçus exclusifs.",
-                "releaseButton": "S'inscrire",
-                "contactTitle": "Nous Contacter",
-                "contactDescription": "Vous avez des questions ou besoin d'assistance? Contactez notre équipe pour plus d'informations.",
-                "contactButton": "Contacter le Support",
-                "popupTitle": "Choisir une Langue"
             }
+        };
+
+        // Function to fetch and update progress information
+        const fetchStatus = async () => {
+            try {
+                const response = await fetch('https://raw.githubusercontent.com/Strichmanni/ByteEngine/refs/heads/main/Status.md');
+                const markdownText = await response.text();
+                const progressMatch = markdownText.match(/Progress:\s*(\d+[\.,]?\d*)%/);
+
+                if (progressMatch) {
+                    progressDescription.textContent = `${progressMatch[1]}%`;
+                }
+
+                progressButton.addEventListener('click', () => {
+                    showMarkdownPopup(markdownText);
+                });
+            } catch (error) {
+                console.error('Error fetching status:', error);
+            }
+        };
+
+        const showMarkdownPopup = (markdownText) => {
+            const popupContent = document.createElement('div');
+            popupContent.classList.add('popup-content');
+            const markdownContainer = document.createElement('div');
+            markdownContainer.classList.add('markdown');
+            markdownContainer.textContent = markdownText;
+            popupContent.appendChild(markdownContainer);
+            const closeButton = document.createElement('button');
+            closeButton.textContent = 'Close';
+            closeButton.addEventListener('click', () => popup.style.display = 'none');
+            popupContent.appendChild(closeButton);
+            popup.innerHTML = '';
+            popup.appendChild(popupContent);
+            popup.style.display = 'flex';
         };
 
         const updateContent = (lang) => {
@@ -380,6 +380,7 @@
         };
 
         detectLanguage();
+        fetchStatus();  // Fetch and update the status
     </script>
 </body>
 </html>
